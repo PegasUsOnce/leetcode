@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LeetcodeConsoleApp.Tasks
@@ -45,19 +47,39 @@ namespace LeetcodeConsoleApp.Tasks
             return nums;
         }
 
+        //Runtime: 132 ms, faster than 99.62% of C# online submissions for Two Sum.
+        //Memory Usage: 44.9 MB, less than 8.74% of C# online submissions for Two Sum.
+        public int[] Solution3(int[] nums, int target)
+        {
+            var length = nums.Length;
+            var dict = new Dictionary<int, int>(length);
+            for (int i = 0; i < length; i++)
+            {
+                var value = target - nums[i];
+                if (dict.ContainsKey(value))
+                    return new[] { i, dict[value] };
+
+                if (!dict.ContainsKey(nums[i]))
+                    dict.Add(nums[i], i);
+            }
+
+            return nums;
+        }
+
         public void Test()
         {
             int[] nums = { 2, 7, 11, 15 };
             var target = 9;
             int[] expected = { 0, 1 };
 
-            var actual = Solution2(nums, target);
-
+            var actual = Solution4(nums, target);
+            var act = actual.ToList();
+            var exp = expected.ToList();
             if (actual.Length != 2)
                 throw new Exception();
 
-            foreach (var i in Enumerable.Range(0, 2))
-                if (actual[i] != expected[i])
+            foreach (var a in act)
+                if (!exp.Contains(a))
                     throw new Exception();
         }
     }
